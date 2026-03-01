@@ -134,8 +134,9 @@ nav {
 
 /* ====== ROUTINE SCREEN ====== */
 .music-player {
-  margin: 0; position: sticky; top: 0; z-index: 5;
+  margin: 0; position: sticky; top: 0; z-index: 50;
   background: var(--deep);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 .music-toggle {
   width: 100%; padding: 10px 20px; display: flex; align-items: center; gap: 8px;
@@ -390,21 +391,21 @@ nav {
         <span style="margin-left:auto">▾</span>
       </button>
       <div class="music-embed" id="music-am-embed">
-        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX9XIZsB0yx9W?utm_source=generator&theme=0"
+        <iframe src="https://www.youtube.com/embed/videoseries?list=PLQkQfzsIUwRYYVMJOPKme9rVUBM9pzEGs&autoplay=0&rel=0"
           width="100%" height="80" frameborder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
       </div>
-    </div>
-    <div class="timer-bar am-timer" id="timer-am">
-      <div class="timer-top">
-        <span class="timer-label">⏱ Wait before next step</span>
-        <span class="timer-time" id="timer-am-time">0:00</span>
-      </div>
-      <div class="timer-next" id="timer-am-next"></div>
-      <div class="timer-track"><div class="timer-fill" id="timer-am-fill" style="width:100%"></div></div>
-      <button class="timer-skip" onclick="skipTimer('am')">Skip →</button>
     </div>
     <div class="steps-wrapper">
+      <div class="timer-bar am-timer" id="timer-am" style="margin:12px 0 8px;">
+        <div class="timer-top">
+          <span class="timer-label">⏱ Wait before next step</span>
+          <span class="timer-time" id="timer-am-time">0:00</span>
+        </div>
+        <div class="timer-next" id="timer-am-next"></div>
+        <div class="timer-track"><div class="timer-fill" id="timer-am-fill" style="width:100%"></div></div>
+        <button class="timer-skip" onclick="skipTimer('am')">Skip →</button>
+      </div>
       <div class="step-dots" id="dots-am"></div>
       <div id="step-content-am"></div>
     </div>
@@ -418,21 +419,21 @@ nav {
         <span style="margin-left:auto">▾</span>
       </button>
       <div class="music-embed" id="music-pm-embed">
-        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0"
+        <iframe src="https://www.youtube.com/embed/videoseries?list=PLMIbmfP_9vb8BCxRoraJpfyeDYCFOmXL_&autoplay=0&rel=0"
           width="100%" height="80" frameborder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
       </div>
-    </div>
-    <div class="timer-bar" id="timer-pm">
-      <div class="timer-top">
-        <span class="timer-label">⏱ Let it absorb</span>
-        <span class="timer-time" id="timer-pm-time">0:00</span>
-      </div>
-      <div class="timer-next" id="timer-pm-next"></div>
-      <div class="timer-track"><div class="timer-fill" id="timer-pm-fill" style="width:100%"></div></div>
-      <button class="timer-skip" onclick="skipTimer('pm')">Skip →</button>
     </div>
     <div class="steps-wrapper">
+      <div class="timer-bar" id="timer-pm" style="margin:12px 0 8px;">
+        <div class="timer-top">
+          <span class="timer-label">⏱ Let it absorb</span>
+          <span class="timer-time" id="timer-pm-time">0:00</span>
+        </div>
+        <div class="timer-next" id="timer-pm-next"></div>
+        <div class="timer-track"><div class="timer-fill" id="timer-pm-fill" style="width:100%"></div></div>
+        <button class="timer-skip" onclick="skipTimer('pm')">Skip →</button>
+      </div>
       <div class="step-dots" id="dots-pm"></div>
       <div id="step-content-pm"></div>
     </div>
@@ -908,8 +909,8 @@ function toggleMusic(routine) {
   embed.classList.toggle('open');
   const label = document.getElementById(`music-${routine}-label`);
   label.textContent = embed.classList.contains('open')
-    ? (routine === 'am' ? '🎵 Morning Acoustic — Spotify' : '🎵 Peaceful Guitar — Spotify')
-    : (routine === 'am' ? 'Morning playlist · tap to play' : 'Evening playlist · tap to play');
+    ? (routine === 'am' ? '🎵 Morning Vibes — YouTube · tap to close' : '🎵 Wind Down — YouTube · tap to close')
+    : (routine === 'am' ? 'Morning playlist · tap to play ▾' : 'Evening playlist · tap to play ▾');
 }
 
 // ============================================================
