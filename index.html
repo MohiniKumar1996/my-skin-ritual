@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>My Skin Ritual ✨</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3D2A22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Skin Ritual">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FAF7F2; --soft: #F2EAE2; --blush: #E8C4B0; --rose: #C98B72;
+  --muted: #8C6B5E; --deep: #3D2A22; --gold: #C9A96E;
+  --night: #1E1610; --night2: #2D1F17; --moon: #E8D5C4;
+  --green: #6B9E78; --amber: #D4A843;
+  --nav-h: 68px; --safe-b: env(safe-area-inset-bottom, 0px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--deep); }
+button { border: none; cursor: pointer; font-family: inherit; }
+iframe { display: block; }
+
+/* ====== LAYOUT ====== */
+#app { height: 100dvh; display: flex; flex-direction: column; }
+.screen { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: calc(var(--nav-h) + var(--safe-b) + 16px); }
+.screen[hidden] { display: none; }
+
+/* ====== NAV ====== */
+nav {
+  height: calc(var(--nav-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: white;
+  border-top: 1px solid rgba(61,42,34,0.08);
+  display: flex;
+  box-shadow: 0 -4px 20px rgba(61,42,34,0.06);
+  flex-shrink: 0;
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; background: none; color: var(--muted); padding: 8px 4px;
+  transition: color 0.2s;
+}
+.nav-btn .nav-icon { font-size: 22px; line-height: 1; }
+.nav-btn .nav-label { font-size: 10px; letter-spacing: 0.5px; font-weight: 500; text-transform: uppercase; }
+.nav-btn.active { color: var(--rose); }
+.nav-btn.active .nav-icon { transform: scale(1.1); }
+
+/* ====== HEADER ====== */
+.page-header {
+  padding: 20px 20px 16px;
+  background: var(--deep);
+  color: var(--cream);
+  position: sticky; top: 0; z-index: 10;
+}
+.page-header.am { background: linear-gradient(135deg, #FFF5EC, #FDEBD8); color: var(--deep); }
+.page-header .greeting { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
+.page-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; line-height: 1.2; }
+.page-header.am h2 { color: var(--deep); }
+.page-header .sub { font-size: 11px; opacity: 0.6; margin-top: 4px; letter-spacing: 0.5px; }
+
+/* ====== HOME SCREEN ====== */
+.home-hero {
+  background: var(--deep); padding: 32px 20px 28px;
+  position: relative; overflow: hidden;
+}
+.home-hero::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,139,114,0.2), transparent 70%);
+}
+.home-date { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.home-greeting { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--cream); line-height: 1.2; margin-bottom: 4px; }
+.home-greeting em { font-style: italic; color: var(--blush); }
+.home-subtitle { font-size: 12px; color: rgba(232,213,196,0.5); letter-spacing: 0.5px; }
+
+.streak-bar {
+  margin: 12px 20px 0; background: rgba(201,169,110,0.12);
+  border: 1px solid rgba(201,169,110,0.25); border-radius: 12px;
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+}
+.streak-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; }
+.streak-label { font-size: 11px; color: var(--moon); opacity: 0.7; }
+
+.today-cards { padding: 20px 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.routine-card {
+  border-radius: 14px; padding: 18px 16px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative; overflow: hidden;
+}
+.routine-card:active { transform: scale(0.97); }
+.routine-card.am-card { background: linear-gradient(135deg, #FFF8F0, #FDEBD8); border: 1px solid var(--blush); }
+.routine-card.pm-card { background: linear-gradient(135deg, var(--night), var(--night2)); border: 1px solid rgba(232,213,196,0.1); }
+.card-icon { font-size: 28px; margin-bottom: 8px; }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; }
+.am-card .card-title { color: var(--deep); }
+.pm-card .card-title { color: var(--cream); }
+.card-steps { font-size: 11px; margin-top: 4px; }
+.am-card .card-steps { color: var(--muted); }
+.pm-card .card-steps { color: rgba(232,213,196,0.5); }
+.card-progress { margin-top: 10px; height: 3px; background: rgba(61,42,34,0.1); border-radius: 2px; }
+.pm-card .card-progress { background: rgba(232,213,196,0.1); }
+.card-progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+.am-card .card-progress-fill { background: var(--rose); }
+.pm-card .card-progress-fill { background: var(--gold); }
+.card-start-btn {
+  margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+.am-card .card-start-btn { background: var(--rose); color: white; }
+.pm-card .card-start-btn { background: var(--gold); color: var(--night); }
+
+.tonight-reminder {
+  margin: 16px 20px 0; padding: 14px 16px;
+  background: white; border: 1px solid rgba(61,42,34,0.08); border-radius: 12px;
+}
+.tonight-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--rose); margin-bottom: 6px; font-weight: 500; }
+.tonight-text { font-size: 13px; color: var(--deep); }
+.tonight-text strong { color: var(--rose); }
+
+.notif-prompt {
+  margin: 16px 20px 0; padding: 14px 16px;
+  background: rgba(201,139,114,0.08); border: 1px dashed var(--blush);
+  border-radius: 12px; display: flex; align-items: center; gap: 12px;
+}
+.notif-prompt p { font-size: 12px; color: var(--muted); flex: 1; line-height: 1.4; }
+.notif-btn { background: var(--rose); color: white; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.notif-prompt[hidden] { display: none; }
+
+/* ====== ROUTINE SCREEN ====== */
+.music-player {
+  margin: 0; position: sticky; top: 0; z-index: 5;
+  background: var(--deep);
+}
+.music-toggle {
+  width: 100%; padding: 10px 20px; display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.05); color: var(--moon);
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500;
+}
+.music-player.am .music-toggle { background: rgba(201,139,114,0.12); color: var(--muted); }
+.music-embed { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+.music-embed.open { max-height: 90px; }
+
+/* Timer bar */
+.timer-bar {
+  margin: 12px 20px; padding: 12px 16px;
+  background: var(--deep); border-radius: 12px; color: var(--cream);
+  display: none;
+}
+.timer-bar.visible { display: block; }
+.timer-bar.am-timer { background: linear-gradient(135deg, #FFF5EC, #FDEBD8); color: var(--deep); border: 1px solid var(--blush); }
+.timer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.timer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+.timer-time { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; }
+.timer-next { font-size: 11px; opacity: 0.6; margin-top: 2px; }
+.timer-track { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
+.am-timer .timer-track { background: rgba(61,42,34,0.1); }
+.timer-fill { height: 100%; border-radius: 2px; background: var(--gold); transition: width 1s linear; }
+.am-timer .timer-fill { background: var(--rose); }
+.timer-skip { margin-top: 8px; font-size: 10px; color: var(--gold); background: none; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; }
+.am-timer .timer-skip { color: var(--rose); }
+
+/* Step card */
+.steps-wrapper { padding: 12px 20px; }
+.step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
+.step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(61,42,34,0.15); transition: all 0.2s; }
+.step-dot.done { background: var(--green); }
+.step-dot.active { background: var(--rose); width: 20px; border-radius: 3px; }
+.pm-screen .step-dot { background: rgba(232,213,196,0.15); }
+.pm-screen .step-dot.active { background: var(--gold); }
+
+.step-card {
+  background: white; border-radius: 16px; padding: 20px;
+  border: 1px solid rgba(61,42,34,0.08);
+  box-shadow: 0 2px 12px rgba(61,42,34,0.06);
+  margin-bottom: 12px;
+}
+.pm-screen .step-card { background: #221510; border-color: rgba(232,213,196,0.08); }
+.step-num { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--rose); font-weight: 500; margin-bottom: 4px; }
+.pm-screen .step-num { color: var(--gold); }
+.step-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--deep); line-height: 1.2; margin-bottom: 2px; }
+.pm-screen .step-name { color: var(--moon); }
+.step-brand { font-size: 10px; color: var(--rose); background: rgba(201,139,114,0.1); display: inline-block; padding: 2px 8px; border-radius: 10px; margin-bottom: 14px; }
+.pm-screen .step-brand { color: var(--gold); background: rgba(201,169,110,0.12); }
+
+.step-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.step-meta-item { background: var(--soft); border-radius: 8px; padding: 8px 10px; }
+.pm-screen .step-meta-item { background: rgba(255,255,255,0.05); }
+.meta-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--rose); margin-bottom: 3px; }
+.pm-screen .meta-label { color: var(--gold); }
+.meta-val { font-size: 11.5px; color: var(--deep); line-height: 1.3; }
+.pm-screen .meta-val { color: var(--moon); }
+
+.step-tip { font-size: 11.5px; color: var(--muted); padding: 10px 12px; background: rgba(201,139,114,0.07); border-left: 2px solid var(--rose); border-radius: 0 8px 8px 0; margin-bottom: 14px; line-height: 1.5; }
+.pm-screen .step-tip { background: rgba(201,169,110,0.07); border-left-color: var(--gold); color: rgba(232,213,196,0.6); }
+
+.step-check-btn {
+  width: 100%; padding: 14px; border-radius: 12px;
+  font-size: 13px; font-weight: 500; letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.step-check-btn.unchecked { background: var(--soft); color: var(--muted); border: 1.5px dashed var(--blush); }
+.step-check-btn.checked { background: var(--green); color: white; }
+.pm-screen .step-check-btn.unchecked { background: rgba(255,255,255,0.05); color: var(--moon); border-color: rgba(232,213,196,0.2); }
+
+.step-nav { display: flex; gap: 10px; margin-top: 10px; }
+.step-nav-btn {
+  flex: 1; padding: 12px; border-radius: 10px; font-size: 12px; font-weight: 500;
+  background: var(--soft); color: var(--muted);
+}
+.step-nav-btn.primary { background: var(--rose); color: white; }
+.pm-screen .step-nav-btn { background: rgba(255,255,255,0.06); color: var(--moon); }
+.pm-screen .step-nav-btn.primary { background: var(--gold); color: var(--night); }
+
+/* Next step preview */
+.next-preview {
+  background: var(--soft); border-radius: 12px; padding: 12px 16px;
+  border: 1px dashed var(--blush); opacity: 0.7;
+}
+.pm-screen .next-preview { background: rgba(255,255,255,0.03); border-color: rgba(232,213,196,0.15); }
+.next-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.next-name { font-size: 13px; color: var(--deep); font-weight: 500; }
+.pm-screen .next-name { color: var(--moon); }
+.next-wait { font-size: 11px; color: var(--rose); margin-top: 2px; }
+.pm-screen .next-wait { color: var(--gold); }
+
+/* Complete screen */
+.complete-screen { text-align: center; padding: 40px 20px; }
+.complete-emoji { font-size: 64px; margin-bottom: 16px; display: block; animation: pop 0.4s ease; }
+@keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.complete-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; margin-bottom: 8px; }
+.complete-subtitle { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 24px; }
+.complete-done-btn { background: var(--rose); color: white; padding: 14px 32px; border-radius: 12px; font-size: 13px; font-weight: 500; }
+
+/* ====== PROGRESS SCREEN ====== */
+.progress-hero {
+  background: var(--deep); padding: 24px 20px;
+  display: flex; align-items: center; gap: 20px;
+}
+.streak-big { text-align: center; }
+.streak-big .num { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; color: var(--gold); line-height: 1; }
+.streak-big .lbl { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--moon); opacity: 0.5; }
+.streak-divider { width: 1px; height: 60px; background: rgba(232,213,196,0.15); }
+.streak-stats { flex: 1; }
+.stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.stat-item .s-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--cream); }
+.stat-item .s-lbl { font-size: 10px; color: rgba(232,213,196,0.4); letter-spacing: 0.5px; }
+
+.section-title {
+  padding: 20px 20px 12px; font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300; color: var(--deep);
+  border-bottom: 1px solid rgba(61,42,34,0.06); margin-bottom: 4px;
+}
+
+/* Calendar */
+.calendar-wrap { padding: 16px 20px; }
+.cal-legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.cal-leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.cal-dot { width: 10px; height: 10px; border-radius: 3px; }
+.cal-dot.full { background: var(--green); }
+.cal-dot.partial { background: var(--amber); }
+.cal-dot.empty { background: rgba(61,42,34,0.1); border: 1px solid rgba(61,42,34,0.1); }
+.cal-dot.today { border: 2px solid var(--rose); }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day-lbl { font-size: 9px; letter-spacing: 1px; text-align: center; color: var(--muted); text-transform: uppercase; padding: 4px 0; }
+.cal-cell {
+  aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center;
+  justify-content: center; font-size: 10px; color: var(--muted); position: relative;
+  background: rgba(61,42,34,0.05);
+}
+.cal-cell.full { background: var(--green); color: white; }
+.cal-cell.partial { background: var(--amber); color: white; }
+.cal-cell.today { box-shadow: 0 0 0 2px var(--rose); }
+.cal-cell.future { opacity: 0.3; }
+
+/* Week stats */
+.week-stats { margin: 0 20px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.week-stat-card { background: white; border-radius: 12px; padding: 14px; border: 1px solid rgba(61,42,34,0.06); }
+.ws-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--rose); }
+.ws-lbl { font-size: 11px; color: var(--muted); }
+
+/* ====== ONBOARDING / PERMISSIONS ====== */
+.permission-overlay {
+  position: fixed; inset: 0; background: rgba(30,22,16,0.95);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+  padding: 20px;
+}
+.permission-overlay[hidden] { display: none; }
+.permission-box {
+  background: var(--cream); border-radius: 20px; padding: 32px 24px;
+  text-align: center; max-width: 320px; width: 100%;
+}
+.permission-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; margin-bottom: 8px; color: var(--deep); }
+.permission-box p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+.permission-box .allow-btn { background: var(--deep); color: var(--cream); padding: 14px 32px; border-radius: 12px; font-size: 13px; font-weight: 500; width: 100%; margin-bottom: 10px; }
+.permission-box .skip-btn { background: none; color: var(--muted); font-size: 12px; padding: 8px; }
+
+/* ====== INSTALL BANNER ====== */
+.install-banner {
+  margin: 16px 20px 0; padding: 14px 16px;
+  background: var(--deep); border-radius: 12px; color: var(--cream);
+  display: flex; align-items: center; gap: 12px;
+}
+.install-banner[hidden] { display: none; }
+.install-banner p { font-size: 12px; opacity: 0.8; flex: 1; line-height: 1.4; }
+.install-banner .install-btn { background: var(--gold); color: var(--night); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+
+/* ====== PM SCREEN BASE ====== */
+#screen-pm { background: var(--night); }
+.pm-screen { background: var(--night); }
+
+/* ====== UTILITY ====== */
+.pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 500; }
+.pill.sa { background: rgba(61,42,34,0.1); color: var(--deep); }
+.pill.nia { background: rgba(201,139,114,0.15); color: var(--rose); }
+.pill.txa { background: rgba(201,169,110,0.15); color: #7A6020; }
+
+@media (max-width: 360px) {
+  .today-cards { grid-template-columns: 1fr; }
+  .step-meta { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ========== SCREENS ========== -->
+
+  <!-- HOME -->
+  <div class="screen" id="screen-home">
+    <div class="home-hero">
+      <div class="home-date" id="home-date"></div>
+      <div class="home-greeting" id="home-greeting"></div>
+      <div class="home-subtitle" id="home-subtitle"></div>
+      <div class="streak-bar">
+        <div>
+          <div class="streak-num" id="streak-num">0</div>
+        </div>
+        <div>
+          <div class="streak-label">🔥 day streak</div>
+          <div class="streak-label" id="streak-message" style="margin-top:2px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="today-cards">
+      <div class="routine-card am-card" onclick="showScreen('am')">
+        <div class="card-icon">☀️</div>
+        <div class="card-title">Morning</div>
+        <div class="card-steps" id="am-status">5 steps · ~10 min</div>
+        <div class="card-progress"><div class="card-progress-fill" id="am-progress-fill" style="width:0%"></div></div>
+        <button class="card-start-btn" id="am-start-btn">Start Routine →</button>
+      </div>
+      <div class="routine-card pm-card" onclick="showScreen('pm')">
+        <div class="card-icon">🌙</div>
+        <div class="card-title">Evening</div>
+        <div class="card-steps" id="pm-status">6 steps · ~15 min</div>
+        <div class="card-progress"><div class="card-progress-fill" id="pm-progress-fill" style="width:0%"></div></div>
+        <button class="card-start-btn" id="pm-start-btn">Start Ritual →</button>
+      </div>
+    </div>
+
+    <div class="tonight-reminder" id="tonight-reminder">
+      <div class="tonight-label">🌿 Tonight's Active Serum</div>
+      <div class="tonight-text" id="tonight-text"></div>
+    </div>
+
+    <div class="install-banner" id="install-banner" hidden>
+      <p>📱 Install as app for notifications & offline use</p>
+      <button class="install-btn" onclick="installApp()">Install</button>
+    </div>
+
+    <div class="notif-prompt" id="notif-prompt">
+      <p>🔔 Enable notifications for 9am & 10pm reminders</p>
+      <button class="notif-btn" onclick="requestNotifications()">Enable</button>
+    </div>
+  </div>
+
+  <!-- AM ROUTINE -->
+  <div class="screen" id="screen-am" hidden>
+    <div class="music-player am" id="music-am">
+      <button class="music-toggle" onclick="toggleMusic('am')">
+        <span>🎵</span><span id="music-am-label">Morning playlist · tap to play</span>
+        <span style="margin-left:auto">▾</span>
+      </button>
+      <div class="music-embed" id="music-am-embed">
+        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX9XIZsB0yx9W?utm_source=generator&theme=0"
+          width="100%" height="80" frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+    <div class="timer-bar am-timer" id="timer-am">
+      <div class="timer-top">
+        <span class="timer-label">⏱ Wait before next step</span>
+        <span class="timer-time" id="timer-am-time">0:00</span>
+      </div>
+      <div class="timer-next" id="timer-am-next"></div>
+      <div class="timer-track"><div class="timer-fill" id="timer-am-fill" style="width:100%"></div></div>
+      <button class="timer-skip" onclick="skipTimer('am')">Skip →</button>
+    </div>
+    <div class="steps-wrapper">
+      <div class="step-dots" id="dots-am"></div>
+      <div id="step-content-am"></div>
+    </div>
+  </div>
+
+  <!-- PM ROUTINE -->
+  <div class="screen pm-screen" id="screen-pm" hidden>
+    <div class="music-player" id="music-pm">
+      <button class="music-toggle" onclick="toggleMusic('pm')">
+        <span>🎵</span><span id="music-pm-label">Evening playlist · tap to play</span>
+        <span style="margin-left:auto">▾</span>
+      </button>
+      <div class="music-embed" id="music-pm-embed">
+        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0"
+          width="100%" height="80" frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+    <div class="timer-bar" id="timer-pm">
+      <div class="timer-top">
+        <span class="timer-label">⏱ Let it absorb</span>
+        <span class="timer-time" id="timer-pm-time">0:00</span>
+      </div>
+      <div class="timer-next" id="timer-pm-next"></div>
+      <div class="timer-track"><div class="timer-fill" id="timer-pm-fill" style="width:100%"></div></div>
+      <button class="timer-skip" onclick="skipTimer('pm')">Skip →</button>
+    </div>
+    <div class="steps-wrapper">
+      <div class="step-dots" id="dots-pm"></div>
+      <div id="step-content-pm"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="screen" id="screen-progress" hidden>
+    <div class="progress-hero">
+      <div class="streak-big">
+        <div class="num" id="prog-streak">0</div>
+        <div class="lbl">Day Streak 🔥</div>
+      </div>
+      <div class="streak-divider"></div>
+      <div class="streak-stats">
+        <div class="stat-row">
+          <div class="stat-item"><div class="s-val" id="prog-week">0/7</div><div class="s-lbl">This Week</div></div>
+          <div class="stat-item"><div class="s-val" id="prog-month">0%</div><div class="s-lbl">This Month</div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-item"><div class="s-val" id="prog-total">0</div><div class="s-lbl">Total Days</div></div>
+          <div class="stat-item"><div class="s-val" id="prog-best">0</div><div class="s-lbl">Best Streak</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-stats" id="week-stats"></div>
+    <div class="section-title">30-Day Calendar</div>
+    <div class="calendar-wrap">
+      <div class="cal-legend">
+        <div class="cal-leg-item"><div class="cal-dot full"></div> Both done</div>
+        <div class="cal-leg-item"><div class="cal-dot partial"></div> Partial</div>
+        <div class="cal-leg-item"><div class="cal-dot empty"></div> Missed</div>
+        <div class="cal-leg-item"><div class="cal-dot today" style="background:transparent"></div> Today</div>
+      </div>
+      <div class="cal-grid" id="cal-day-labels"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+
+  <!-- ========== NAV ========== -->
+  <nav>
+    <button class="nav-btn active" data-screen="home" onclick="showScreen('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-btn" data-screen="am" onclick="showScreen('am')">
+      <span class="nav-icon">☀️</span><span class="nav-label">Morning</span>
+    </button>
+    <button class="nav-btn" data-screen="pm" onclick="showScreen('pm')">
+      <span class="nav-icon">🌙</span><span class="nav-label">Evening</span>
+    </button>
+    <button class="nav-btn" data-screen="progress" onclick="showScreen('progress')">
+      <span class="nav-icon">📊</span><span class="nav-label">Progress</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Permission overlay (first time) -->
+<div class="permission-overlay" id="permission-overlay" hidden>
+  <div class="permission-box">
+    <div style="font-size:48px;margin-bottom:12px">🌿</div>
+    <h3>Daily Skin Reminders</h3>
+    <p>Get a gentle nudge at <strong>9:00 AM</strong> for your morning ritual and <strong>10:00 PM</strong> for your evening routine. Your skin will thank you.</p>
+    <button class="allow-btn" onclick="grantNotifications()">Enable Reminders ✨</button>
+    <button class="skip-btn" onclick="skipNotifications()">Maybe later</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const AM_STEPS = [
+  {
+    id: 'am1', name: 'Cleanse', product: 'Quick Gentle Cleanser', brand: 'Waso Shiseido',
+    amount: 'Pea-sized, lather with water', technique: '45 sec gentle circles',
+    area: 'Full face — gentle on cheeks', wait: 0,
+    tip: '🌿 AM cleanse is a reset, not a deep clean. Just removing overnight oils.'
+  },
+  {
+    id: 'am2', name: 'Hydrating Toner', product: 'Blueberry Hydrate Toner', brand: 'Dot & Key',
+    amount: '5–6 drops or half cotton pad', technique: 'Pat gently — never rub',
+    area: 'Full face — extra on dry cheeks', wait: 60,
+    tip: '💧 Apply on slightly damp skin. Patting drives hydration deeper.'
+  },
+  {
+    id: 'am3', name: 'Vitamin C Serum', product: '10% Vitamin C Face Serum', brand: 'The Derma Co',
+    amount: '3–4 drops', technique: 'Press into skin — don\'t drag',
+    area: 'Full face + lip line + cheek marks', wait: 240,
+    tip: '✨ Your #1 glow driver. Cover perioral area especially. AM only — always follow with SPF.'
+  },
+  {
+    id: 'am4', name: 'Moisturise', product: 'Ceramide Moisturising Cream', brand: 'Minimalist',
+    amount: 'Pea-sized (more on cheeks)', technique: 'Upward strokes, press on cheeks',
+    area: 'Full face — generous on cheeks', wait: 120,
+    tip: '🛡️ Locks in your Vit C. More on cheeks than T-zone.'
+  },
+  {
+    id: 'am5', name: 'Sunscreen', product: 'SPF 50 PA++++ Sunscreen', brand: 'Hyphen',
+    amount: '2 finger-lengths', technique: 'Dot on 5 points, spread evenly',
+    area: 'Full face + lip line + ears + neck', wait: 0,
+    tip: '☀️ Most important step for dark spots. Right up to lip line. Reapply every 2hrs outdoors.'
+  }
+];
+
+function getPMSteps() {
+  const day = new Date().getDay(); // 0=Sun, 1=Mon, 3=Wed, 6=Sat
+  const isSA = day === 3 || day === 6;
+  const isCycleWeek = localStorage.getItem('cycleWeek') === 'true';
+  const isSAExtra = isCycleWeek && (day === 1);
+  const useSA = isSA || isSAExtra;
+
+  return [
+    {
+      id: 'pm1', name: 'Cleanse', product: 'Daily De-Tan Cleanser', brand: 'UV Squad',
+      amount: 'Pump-sized, lather well', technique: '60 sec massage, extra on jaw',
+      area: 'Full face — extra on jaw + chin', wait: 0,
+      tip: '🌙 PM deep clean. Extra 15 secs on jaw & chin where hormonal spots cluster. Remove ALL SPF.'
+    },
+    {
+      id: 'pm2', name: 'Hydrating Toner', product: 'Blueberry Hydrate Toner', brand: 'Dot & Key',
+      amount: '5–6 drops', technique: 'Pat gently — never wipe',
+      area: 'Full face — extra on cheeks', wait: 60,
+      tip: '💧 Skin repairs 80% faster when hydrated. This makes actives work better and gentler.'
+    },
+    {
+      id: 'pm3', name: 'PIH Treatment', product: '3% Tranexamic Acid Serum', brand: 'Minimalist',
+      amount: '1–2 drops only', technique: 'Dab precisely onto marks — don\'t spread',
+      area: '⚠️ Cheek marks + perioral area ONLY', wait: 150,
+      tip: '🎯 Precision product. Targets melanin from two pathways. Every single night, no exceptions.'
+    },
+    {
+      id: 'pm4',
+      name: useSA ? '🧴 Salicylic Acid Tonight' : '🌿 Niacinamide Tonight',
+      product: useSA ? '2% Salicylic Acid Serum' : '10% Niacinamide + Zinc Serum',
+      brand: useSA ? 'The Derma Co' : 'Dot & Key',
+      amount: useSA ? '2–3 drops' : '3–4 drops',
+      technique: useSA ? 'T-zone + chin + nose ONLY' : 'Full face — safe everywhere',
+      area: useSA ? '⚠️ T-zone, chin, nose ONLY — never on PIH cheek marks' : 'Full face',
+      wait: 180,
+      tip: useSA
+        ? '⚠️ SA night! Strict T-zone only. Keep completely away from cheek PIH marks.'
+        : '💪 Workhorse night — oil, pigmentation, barrier all in one. Safe on cheeks.'
+    },
+    {
+      id: 'pm5', name: 'Face Oil', product: 'Daily Reviving Concentrate', brand: 'Kiehl\'s',
+      amount: '2–3 drops only', technique: 'Warm between fingers, press into cheeks',
+      area: '⚠️ Cheeks + PIH marks ONLY — skip T-zone', wait: 120,
+      tip: '🌿 Tamanu oil works on PIH overnight. Never on forehead or nose — will clog T-zone.'
+    },
+    {
+      id: 'pm6', name: 'Night Moisturiser', product: 'Ceramide Rich Pillow Cream', brand: 'Hyphen',
+      amount: 'More generous than AM', technique: 'Upward strokes, press generously on cheeks',
+      area: 'Full face — very generous on dry cheeks', wait: 0,
+      tip: '🌙 80% of skin repair happens at night. Heartleaf keeps acne calm while ceramides rebuild. Don\'t skimp.'
+    }
+  ];
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let currentScreen = 'home';
+let currentStepIndex = { am: 0, pm: 0 };
+let timerIntervals = { am: null, pm: null };
+let timerRemaining = { am: 0, pm: 0 };
+let timerTotal = { am: 0, pm: 0 };
+let installPrompt = null;
+
+// ============================================================
+// STORAGE
+// ============================================================
+function todayKey(routine) {
+  return `${routine}_${new Date().toDateString()}`;
+}
+
+function getChecked(routine) {
+  try { return JSON.parse(localStorage.getItem(todayKey(routine)) || '[]'); } catch { return []; }
+}
+
+function setChecked(routine, arr) {
+  localStorage.setItem(todayKey(routine), JSON.stringify(arr));
+  updateHomeCards();
+}
+
+function isChecked(routine, idx) {
+  return getChecked(routine).includes(idx);
+}
+
+function toggleCheck(routine, idx) {
+  const arr = getChecked(routine);
+  const i = arr.indexOf(idx);
+  if (i === -1) arr.push(idx); else arr.splice(i, 1);
+  setChecked(routine, arr);
+}
+
+function getHistoryData() {
+  const results = [];
+  const today = new Date();
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const ds = d.toDateString();
+    const amK = `am_${ds}`, pmK = `pm_${ds}`;
+    const amArr = JSON.parse(localStorage.getItem(amK) || '[]');
+    const pmArr = JSON.parse(localStorage.getItem(pmK) || '[]');
+    const amTotal = 5, pmTotal = 6;
+    const amDone = amArr.length >= amTotal;
+    const pmDone = pmArr.length >= pmTotal;
+    const anyDone = amArr.length > 0 || pmArr.length > 0;
+    results.push({ date: d, amDone, pmDone, anyDone, amCount: amArr.length, pmCount: pmArr.length, amTotal, pmTotal });
+  }
+  return results;
+}
+
+function calcStreak() {
+  const hist = getHistoryData();
+  let streak = 0;
+  for (let i = 0; i < hist.length; i++) {
+    if (hist[i].anyDone) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function calcBestStreak() {
+  const hist = getHistoryData().reverse();
+  let best = 0, cur = 0;
+  for (const d of hist) {
+    if (d.anyDone) { cur++; best = Math.max(best, cur); } else cur = 0;
+  }
+  return best;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(screen, step = null) {
+  document.querySelectorAll('.screen').forEach(s => s.hidden = true);
+  document.getElementById(`screen-${screen}`).hidden = false;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.screen === screen));
+  currentScreen = screen;
+  if (step !== null) currentStepIndex[screen] = step;
+  if (screen === 'home') renderHome();
+  else if (screen === 'am') renderStep('am');
+  else if (screen === 'pm') renderStep('pm');
+  else if (screen === 'progress') renderProgress();
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  const now = new Date();
+  const h = now.getHours();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dayName = days[now.getDay()];
+  const todayStr = `${dayName}, ${now.getDate()} ${months[now.getMonth()]}`;
+
+  document.getElementById('home-date').textContent = todayStr;
+
+  let greeting, subtitle;
+  if (h < 12) { greeting = 'Good morning <em>beautiful</em>'; subtitle = '✨ Start your AM ritual for glowing skin today'; }
+  else if (h < 18) { greeting = 'Good afternoon'; subtitle = '🌿 Your evening ritual awaits at 10pm'; }
+  else { greeting = 'Good evening <em>gorgeous</em>'; subtitle = '🌙 Time for your PM ritual'; }
+  document.getElementById('home-greeting').innerHTML = greeting;
+  document.getElementById('home-subtitle').textContent = subtitle;
+
+  const streak = calcStreak();
+  document.getElementById('streak-num').textContent = streak;
+  document.getElementById('streak-message').textContent = streak === 0 ? 'Start today!' : streak < 7 ? 'Keep going!' : '🌟 Amazing!';
+
+  updateHomeCards();
+
+  // Tonight's active
+  const day = now.getDay();
+  const isSA = day === 3 || day === 6;
+  const isCycle = localStorage.getItem('cycleWeek') === 'true';
+  const isSAExtra = isCycle && day === 1;
+  const useSA = isSA || isSAExtra;
+  document.getElementById('tonight-text').innerHTML = useSA
+    ? '<strong>Salicylic Acid</strong> (The Derma Co) — T-zone, chin & nose only 🧴'
+    : '<strong>Niacinamide 10%</strong> (Dot & Key) — full face tonight 🌿';
+
+  // Notification prompt
+  const notifGranted = Notification?.permission === 'granted';
+  const notifAsked = localStorage.getItem('notifAsked');
+  document.getElementById('notif-prompt').hidden = notifGranted || !!notifAsked;
+}
+
+function updateHomeCards() {
+  const amChecked = getChecked('am');
+  const pmChecked = getChecked('pm');
+  const amPct = Math.round((amChecked.length / 5) * 100);
+  const pmPct = Math.round((pmChecked.length / 6) * 100);
+
+  document.getElementById('am-progress-fill').style.width = amPct + '%';
+  document.getElementById('pm-progress-fill').style.width = pmPct + '%';
+  document.getElementById('am-status').textContent = amPct === 100 ? '✅ Complete!' : `${amChecked.length}/5 steps done`;
+  document.getElementById('pm-status').textContent = pmPct === 100 ? '✅ Complete!' : `${pmChecked.length}/6 steps done`;
+  document.getElementById('am-start-btn').textContent = amPct === 100 ? '✅ Done today' : amPct > 0 ? 'Continue →' : 'Start Routine →';
+  document.getElementById('pm-start-btn').textContent = pmPct === 100 ? '✅ Done today' : pmPct > 0 ? 'Continue →' : 'Start Ritual →';
+}
+
+// ============================================================
+// ROUTINE STEP RENDER
+// ============================================================
+function renderStep(routine) {
+  const steps = routine === 'am' ? AM_STEPS : getPMSteps();
+  const idx = currentStepIndex[routine];
+  const totalSteps = steps.length;
+  const isComplete = idx >= totalSteps;
+
+  if (isComplete) { renderComplete(routine); return; }
+
+  // Dots
+  const dotsEl = document.getElementById(`dots-${routine}`);
+  dotsEl.innerHTML = steps.map((_, i) => {
+    const cls = isChecked(routine, i) ? 'done' : i === idx ? 'active' : '';
+    return `<div class="step-dot ${cls}"></div>`;
+  }).join('');
+
+  const step = steps[idx];
+  const nextStep = idx < steps.length - 1 ? steps[idx + 1] : null;
+  const checked = isChecked(routine, idx);
+  const isLast = idx === steps.length - 1;
+  const isPM = routine === 'pm';
+
+  const html = `
+    <div class="step-card">
+      <div class="step-num">Step ${idx + 1} of ${totalSteps}</div>
+      <div class="step-name">${step.name}</div>
+      <div class="step-brand">${step.brand}</div>
+      <div style="font-size:13px;color:${isPM ? 'var(--moon)' : 'var(--deep)'};margin-bottom:12px;font-style:italic;opacity:0.8">${step.product}</div>
+
+      <div class="step-meta">
+        <div class="step-meta-item">
+          <div class="meta-label">Amount</div>
+          <div class="meta-val">${step.amount}</div>
+        </div>
+        <div class="step-meta-item">
+          <div class="meta-label">Technique</div>
+          <div class="meta-val">${step.technique}</div>
+        </div>
+        <div class="step-meta-item" style="grid-column:1/-1">
+          <div class="meta-label">Focus Area</div>
+          <div class="meta-val">${step.area}</div>
+        </div>
+      </div>
+
+      <div class="step-tip">${step.tip}</div>
+
+      <button class="step-check-btn ${checked ? 'checked' : 'unchecked'}"
+        onclick="handleCheck('${routine}', ${idx})">
+        ${checked ? '✅ Done — moving on!' : '○  Tap when done'}
+      </button>
+
+      <div class="step-nav">
+        ${idx > 0 ? `<button class="step-nav-btn" onclick="goToStep('${routine}', ${idx - 1})">← Back</button>` : ''}
+        ${checked ? `<button class="step-nav-btn primary" onclick="goToStep('${routine}', ${idx + 1})">${isLast ? 'Finish 🎉' : 'Next →'}</button>` : ''}
+      </div>
+    </div>
+
+    ${nextStep && !isLast ? `
+      <div class="next-preview">
+        <div class="next-label">Coming up next</div>
+        <div class="next-name">${nextStep.name} — ${nextStep.product}</div>
+        ${step.wait > 0 ? `<div class="next-wait">⏱ ${formatWait(step.wait)} absorption time before this step</div>` : ''}
+      </div>` : ''}
+  `;
+
+  document.getElementById(`step-content-${routine}`).innerHTML = html;
+}
+
+function renderComplete(routine) {
+  const isPM = routine === 'pm';
+  document.getElementById(`dots-${routine}`).innerHTML = '';
+  document.getElementById(`step-content-${routine}`).innerHTML = `
+    <div class="complete-screen">
+      <span class="complete-emoji">${isPM ? '🌙' : '✨'}</span>
+      <div class="complete-title">${isPM ? 'Evening ritual complete!' : 'Morning ritual complete!'}</div>
+      <div class="complete-subtitle">${isPM ? 'Your skin is being nourished overnight 💛 Sweet dreams.' : 'Your skin is glowing and protected ☀️ Have a beautiful day!'}</div>
+      <button class="complete-done-btn" onclick="showScreen('home')">Back to Home 🏠</button>
+    </div>
+  `;
+  clearTimer(routine);
+}
+
+function handleCheck(routine, idx) {
+  const wasChecked = isChecked(routine, idx);
+  toggleCheck(routine, idx);
+
+  if (!wasChecked) {
+    const steps = routine === 'am' ? AM_STEPS : getPMSteps();
+    const step = steps[idx];
+    if (step.wait > 0) {
+      startTimer(routine, step.wait, idx);
+    }
+  }
+
+  renderStep(routine);
+}
+
+function goToStep(routine, idx) {
+  const steps = routine === 'am' ? AM_STEPS : getPMSteps();
+  currentStepIndex[routine] = Math.min(Math.max(0, idx), steps.length);
+  clearTimer(routine);
+  renderStep(routine);
+}
+
+// ============================================================
+// TIMER
+// ============================================================
+function startTimer(routine, seconds, stepIdx) {
+  clearTimer(routine);
+  timerTotal[routine] = seconds;
+  timerRemaining[routine] = seconds;
+
+  const steps = routine === 'am' ? AM_STEPS : getPMSteps();
+  const nextStep = steps[stepIdx + 1];
+  const timerEl = document.getElementById(`timer-${routine}`);
+  const timeEl = document.getElementById(`timer-${routine}-time`);
+  const nextEl = document.getElementById(`timer-${routine}-next`);
+  const fillEl = document.getElementById(`timer-${routine}-fill`);
+
+  if (nextStep) nextEl.textContent = `Next: ${nextStep.name} — ${nextStep.product}`;
+  timerEl.classList.add('visible');
+
+  function tick() {
+    timerRemaining[routine]--;
+    const m = Math.floor(timerRemaining[routine] / 60);
+    const s = timerRemaining[routine] % 60;
+    timeEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    fillEl.style.width = ((timerRemaining[routine] / timerTotal[routine]) * 100) + '%';
+
+    if (timerRemaining[routine] <= 0) {
+      clearTimer(routine);
+      timerEl.classList.remove('visible');
+      goToStep(routine, stepIdx + 1);
+    }
+  }
+
+  timeEl.textContent = `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+  fillEl.style.width = '100%';
+  timerIntervals[routine] = setInterval(tick, 1000);
+}
+
+function clearTimer(routine) {
+  if (timerIntervals[routine]) clearInterval(timerIntervals[routine]);
+  timerIntervals[routine] = null;
+  const el = document.getElementById(`timer-${routine}`);
+  if (el) el.classList.remove('visible');
+}
+
+function skipTimer(routine) {
+  const stepIdx = currentStepIndex[routine];
+  clearTimer(routine);
+  goToStep(routine, stepIdx + 1);
+}
+
+function formatWait(s) {
+  if (s < 60) return `${s} seconds`;
+  const m = Math.round(s / 60);
+  return `${m} minute${m !== 1 ? 's' : ''}`;
+}
+
+// ============================================================
+// MUSIC
+// ============================================================
+function toggleMusic(routine) {
+  const embed = document.getElementById(`music-${routine}-embed`);
+  embed.classList.toggle('open');
+  const label = document.getElementById(`music-${routine}-label`);
+  label.textContent = embed.classList.contains('open')
+    ? (routine === 'am' ? '🎵 Morning Acoustic — Spotify' : '🎵 Peaceful Guitar — Spotify')
+    : (routine === 'am' ? 'Morning playlist · tap to play' : 'Evening playlist · tap to play');
+}
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function renderProgress() {
+  const hist = getHistoryData();
+  const streak = calcStreak();
+  const best = calcBestStreak();
+  const total = hist.filter(d => d.anyDone).length;
+
+  document.getElementById('prog-streak').textContent = streak;
+  document.getElementById('prog-best').textContent = best;
+  document.getElementById('prog-total').textContent = total;
+
+  // Week stats
+  const thisWeek = hist.slice(0, 7);
+  const weekDone = thisWeek.filter(d => d.anyDone).length;
+  const monthDone = hist.filter(d => d.anyDone).length;
+  document.getElementById('prog-week').textContent = `${weekDone}/7`;
+  document.getElementById('prog-month').textContent = Math.round((monthDone / 30) * 100) + '%';
+
+  // Week stat cards
+  const amWeek = thisWeek.filter(d => d.amDone).length;
+  const pmWeek = thisWeek.filter(d => d.pmDone).length;
+  document.getElementById('week-stats').innerHTML = `
+    <div class="week-stat-card">
+      <div class="ws-num">☀️ ${amWeek}/7</div>
+      <div class="ws-lbl">AM routines this week</div>
+    </div>
+    <div class="week-stat-card">
+      <div class="ws-num">🌙 ${pmWeek}/7</div>
+      <div class="ws-lbl">PM routines this week</div>
+    </div>
+  `;
+
+  // Calendar
+  const days = ['S','M','T','W','T','F','S'];
+  document.getElementById('cal-day-labels').innerHTML = days.map(d =>
+    `<div class="cal-day-lbl">${d}</div>`).join('');
+
+  const today = new Date();
+  const startPad = today.getDay(); // pad at end since we go backwards
+  let cells = '';
+
+  // Fill from oldest to newest (30 days ago → today)
+  const orderedHist = [...hist].reverse(); // now index 0 = 30 days ago, index 29 = today
+
+  // Calculate start day of week for 30 days ago
+  const firstDay = orderedHist[0].date;
+  const firstDow = firstDay.getDay();
+  // Empty cells for days before
+  for (let i = 0; i < firstDow; i++) cells += `<div class="cal-cell future"></div>`;
+
+  orderedHist.forEach((d, i) => {
+    const isToday = d.date.toDateString() === today.toDateString();
+    const isFuture = false; // all hist entries are past/today
+    let cls = '';
+    if (d.amDone && d.pmDone) cls = 'full';
+    else if (d.anyDone) cls = 'partial';
+    if (isToday) cls += ' today';
+    const dayNum = d.date.getDate();
+    cells += `<div class="cal-cell ${cls}">${dayNum}</div>`;
+  });
+
+  document.getElementById('cal-grid').innerHTML = cells;
+}
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+async function requestNotifications() {
+  localStorage.setItem('notifAsked', '1');
+  document.getElementById('notif-prompt').hidden = true;
+  if ('Notification' in window) {
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') {
+      document.getElementById('permission-overlay').hidden = true;
+      new Notification('Skin Ritual 🌿', {
+        body: 'Reminders enabled! You\'ll hear from us at 9am & 10pm 💛',
+        icon: 'icon-192.png'
+      });
+    }
+  }
+}
+
+async function grantNotifications() {
+  await requestNotifications();
+  document.getElementById('permission-overlay').hidden = true;
+}
+
+function skipNotifications() {
+  localStorage.setItem('notifAsked', '1');
+  document.getElementById('permission-overlay').hidden = true;
+}
+
+// ============================================================
+// INSTALL PROMPT (PWA)
+// ============================================================
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  installPrompt = e;
+  document.getElementById('install-banner').hidden = false;
+});
+
+async function installApp() {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  const result = await installPrompt.userChoice;
+  if (result.outcome === 'accepted') {
+    document.getElementById('install-banner').hidden = true;
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').hidden = true;
+});
+
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('sw.js');
+      // Keep SW alive for notifications
+      setInterval(() => {
+        if (reg.active) reg.active.postMessage({ type: 'KEEP_ALIVE' });
+      }, 25000);
+
+      // Listen for messages from SW (notification clicks)
+      navigator.serviceWorker.addEventListener('message', e => {
+        if (e.data?.type === 'OPEN_ROUTINE') {
+          showScreen(e.data.routine);
+        }
+      });
+    } catch (err) {
+      console.log('SW registration failed:', err);
+    }
+  });
+}
+
+// ============================================================
+// URL PARAMS (from notification click)
+// ============================================================
+const urlParams = new URLSearchParams(window.location.search);
+const routineParam = urlParams.get('routine');
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  // Check if first time (show notification prompt)
+  const notifAsked = localStorage.getItem('notifAsked');
+  const notifGranted = Notification?.permission === 'granted';
+  if (!notifAsked && !notifGranted) {
+    setTimeout(() => {
+      document.getElementById('permission-overlay').hidden = false;
+    }, 1000);
+  }
+
+  if (routineParam === 'am' || routineParam === 'pm') {
+    showScreen(routineParam);
+  } else {
+    // Auto-suggest based on time
+    const h = new Date().getHours();
+    const amChecked = getChecked('am');
+    const pmChecked = getChecked('pm');
+    if (h >= 6 && h < 14 && amChecked.length > 0 && amChecked.length < 5) {
+      // AM in progress
+      currentStepIndex.am = Math.max(...amChecked) + 1;
+    }
+    showScreen('home');
+  }
+}
+
+init();
+</script>
+</body>
+</html>
