@@ -134,16 +134,9 @@ nav {
 
 /* ====== ROUTINE SCREEN ====== */
 .music-player {
-  margin: 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  margin: 0; position: sticky; top: 0; z-index: 50;
   background: var(--deep);
   box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-
-  /* 👇 This fixes iPhone notch overlap */
-  padding-top: env(safe-area-inset-top);
-  background-clip: padding-box;
 }
 .music-toggle {
   width: 100%; padding: 10px 20px; display: flex; align-items: center; gap: 8px;
@@ -388,6 +381,25 @@ nav {
       <p>🔔 Enable notifications for 9am & 10pm reminders</p>
       <button class="notif-btn" onclick="requestNotifications()">Enable</button>
     </div>
+
+    <!-- Late night missed PM banner -->
+    <div id="late-night-banner" hidden
+      style="margin:16px 20px 0;padding:16px;background:var(--night);border-radius:14px;border:1px solid rgba(232,213,196,0.12)">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">🌙 Late Night Check</div>
+      <div style="font-size:13px;color:var(--moon);line-height:1.5;margin-bottom:14px">
+        It's past midnight — did you do your <strong style="color:var(--gold)">evening skincare</strong> last night but forgot to log it?
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="lateNightLog(true)"
+          style="flex:1;padding:10px;background:var(--gold);color:var(--night);border-radius:10px;font-size:12px;font-weight:500">
+          ✅ Yes, log it
+        </button>
+        <button onclick="lateNightLog(false)"
+          style="flex:1;padding:10px;background:rgba(232,213,196,0.08);color:var(--moon);border-radius:10px;font-size:12px">
+          ✗ No, skip
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- AM ROUTINE -->
@@ -398,18 +410,18 @@ nav {
         <span style="margin-left:auto">▾</span>
       </button>
       <div class="music-embed" id="music-am-embed">
-  <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;background:rgba(201,139,114,0.1)">
-    <span style="font-size:28px">☀️</span>
-    <div style="flex:1">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Morning Energy Playlist</div>
-      <div style="font-size:11px;color:var(--rose);opacity:0.8">Upbeat · Motivating · Sets the tone</div>
-    </div>
-    <a href="https://open.spotify.com/playlist/37i9dQZF1DX9XIZsB0yx9W" target="_blank"
-      style="background:var(--rose);color:white;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap">
-      Open in Spotify ↗
-    </a>
-  </div>
-</div>
+        <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;background:rgba(201,139,114,0.1)">
+          <span style="font-size:24px">☀️</span>
+          <div style="flex:1">
+            <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Morning Energy</div>
+            <div style="font-size:11px;color:var(--rose);opacity:0.8">Upbeat · Motivating · Sets the tone</div>
+          </div>
+          <a href="https://open.spotify.com/playlist/37i9dQZF1DX9XIZsB0yx9W" target="_blank"
+            style="background:var(--rose);color:white;padding:9px 14px;border-radius:10px;font-size:11px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-block">
+            Open Spotify ↗
+          </a>
+        </div>
+      </div>
     </div>
     <div class="steps-wrapper">
       <div class="timer-bar am-timer" id="timer-am" style="margin:12px 0 8px;">
@@ -434,18 +446,18 @@ nav {
         <span style="margin-left:auto">▾</span>
       </button>
       <div class="music-embed" id="music-pm-embed">
-  <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;background:rgba(201,169,110,0.08)">
-    <span style="font-size:28px">🌙</span>
-    <div style="flex:1">
-      <div style="font-size:11px;color:var(--moon);opacity:0.6;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Evening Wind Down</div>
-      <div style="font-size:11px;color:var(--gold);opacity:0.8">Calm · Relaxing · Sleep prep</div>
-    </div>
-    <a href="https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO" target="_blank"
-      style="background:var(--gold);color:var(--night);padding:10px 16px;border-radius:10px;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap">
-      Open in Spotify ↗
-    </a>
-  </div>
-</div>
+        <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;background:rgba(201,169,110,0.08)">
+          <span style="font-size:24px">🌙</span>
+          <div style="flex:1">
+            <div style="font-size:11px;color:rgba(232,213,196,0.6);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Wind Down</div>
+            <div style="font-size:11px;color:var(--gold);opacity:0.8">Calm · Relaxing · Sleep prep</div>
+          </div>
+          <a href="https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO" target="_blank"
+            style="background:var(--gold);color:var(--night);padding:9px 14px;border-radius:10px;font-size:11px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-block">
+            Open Spotify ↗
+          </a>
+        </div>
+      </div>
     </div>
     <div class="steps-wrapper">
       <div class="timer-bar" id="timer-pm" style="margin:12px 0 8px;">
@@ -746,6 +758,9 @@ function renderHome() {
   const notifGranted = Notification?.permission === 'granted';
   const notifAsked = localStorage.getItem('notifAsked');
   document.getElementById('notif-prompt').hidden = notifGranted || !!notifAsked;
+
+  // Late night banner
+  checkLateNightBanner();
 }
 
 function updateHomeCards() {
@@ -773,7 +788,6 @@ function renderStep(routine) {
 
   if (isComplete) { renderComplete(routine); return; }
 
-  // Dots
   const dotsEl = document.getElementById(`dots-${routine}`);
   dotsEl.innerHTML = steps.map((_, i) => {
     const cls = isChecked(routine, i) ? 'done' : i === idx ? 'active' : '';
@@ -785,6 +799,52 @@ function renderStep(routine) {
   const checked = isChecked(routine, idx);
   const isLast = idx === steps.length - 1;
   const isPM = routine === 'pm';
+  const isWaiting = checked && timerEndAt[routine] && Date.now() < timerEndAt[routine];
+
+  // Build the "what to do" instruction box based on step type
+  let actionBox = '';
+  if (!checked) {
+    // Step not done yet — show clear instruction
+    if (step.wait > 0) {
+      actionBox = `
+        <div style="background:${isPM ? 'rgba(201,169,110,0.1)' : 'rgba(201,139,114,0.08)'};border-radius:10px;padding:12px 14px;margin-bottom:14px;border-left:3px solid ${isPM ? 'var(--gold)' : 'var(--rose)'}">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${isPM ? 'var(--gold)' : 'var(--rose)'};font-weight:600;margin-bottom:6px">HOW THIS STEP WORKS</div>
+          <div style="font-size:12.5px;color:${isPM ? 'var(--moon)' : 'var(--deep)'};line-height:1.6">
+            <strong>1.</strong> Apply the product using the technique above<br>
+            <strong>2.</strong> Tap <em>"Done applying"</em> when finished<br>
+            <strong>3.</strong> A <strong>${formatWait(step.wait)} timer</strong> will start — leave product on, don't touch your face<br>
+            <strong>4.</strong> Timer auto-advances you to the next step 🌿
+          </div>
+        </div>`;
+    } else {
+      actionBox = `
+        <div style="background:${isPM ? 'rgba(201,169,110,0.1)' : 'rgba(201,139,114,0.08)'};border-radius:10px;padding:10px 14px;margin-bottom:14px;border-left:3px solid ${isPM ? 'var(--gold)' : 'var(--rose)'}">
+          <div style="font-size:12px;color:${isPM ? 'var(--moon)' : 'var(--deep)'};line-height:1.5">
+            Apply, then tap <em>"Done"</em> to move straight to the next step — no wait needed for this one.
+          </div>
+        </div>`;
+    }
+  } else if (isWaiting) {
+    // Checked and timer running — show "leave it" instruction
+    actionBox = `
+      <div style="background:${isPM ? 'rgba(107,158,120,0.12)' : 'rgba(107,158,120,0.1)'};border-radius:10px;padding:12px 14px;margin-bottom:14px;border-left:3px solid var(--green)">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:5px">⏱ NOW WAIT</div>
+        <div style="font-size:12.5px;color:${isPM ? 'var(--moon)' : 'var(--deep)'};line-height:1.6">
+          Product is on ✅ — <strong>leave it alone</strong>, don't rub or touch.<br>
+          Timer above will auto-advance you when ready 🌿
+        </div>
+      </div>`;
+  }
+
+  // Check button label
+  let checkLabel, checkClass;
+  if (!checked) {
+    checkLabel = step.wait > 0 ? '✓ &nbsp;Done applying — start timer' : '✓ &nbsp;Done — next step';
+    checkClass = 'unchecked';
+  } else {
+    checkLabel = isWaiting ? '⏱ Waiting for absorption...' : '✅ Complete';
+    checkClass = 'checked';
+  }
 
   const html = `
     <div class="step-card">
@@ -810,22 +870,22 @@ function renderStep(routine) {
 
       <div class="step-tip">${step.tip}</div>
 
-      <button class="step-check-btn ${checked ? 'checked' : 'unchecked'}"
-        onclick="handleCheck('${routine}', ${idx})">
-        ${checked ? '✅ Done — moving on!' : '○  Tap when done'}
+      ${actionBox}
+
+      <button class="step-check-btn ${checkClass}"
+        onclick="${!checked ? `handleCheck('${routine}', ${idx})` : ''}"
+        style="${checked && isWaiting ? 'opacity:0.6;cursor:default' : ''}">
+        ${checkLabel}
       </button>
 
-      <div class="step-nav">
-        ${idx > 0 ? `<button class="step-nav-btn" onclick="goToStep('${routine}', ${idx - 1})">← Back</button>` : ''}
-        ${checked ? `<button class="step-nav-btn primary" onclick="goToStep('${routine}', ${idx + 1})">${isLast ? 'Finish 🎉' : 'Next →'}</button>` : ''}
-      </div>
+      ${idx > 0 ? `<div style="margin-top:10px"><button class="step-nav-btn" onclick="goToStep('${routine}', ${idx - 1})" style="width:100%;padding:10px;border-radius:10px;font-size:12px">← Back to previous step</button></div>` : ''}
     </div>
 
     ${nextStep && !isLast ? `
       <div class="next-preview">
         <div class="next-label">Coming up next</div>
         <div class="next-name">${nextStep.name} — ${nextStep.product}</div>
-        ${step.wait > 0 ? `<div class="next-wait">⏱ ${formatWait(step.wait)} absorption time before this step</div>` : ''}
+        ${step.wait > 0 && !checked ? `<div class="next-wait">⏱ ${formatWait(step.wait)} absorption time before this</div>` : ''}
       </div>` : ''}
   `;
 
@@ -871,10 +931,13 @@ function goToStep(routine, idx) {
 // ============================================================
 // TIMER
 // ============================================================
+// Timer end timestamps (wall clock — survives screen off)
+let timerEndAt = { am: null, pm: null };
+
 function startTimer(routine, seconds, stepIdx) {
   clearTimer(routine);
   timerTotal[routine] = seconds;
-  timerRemaining[routine] = seconds;
+  timerEndAt[routine] = Date.now() + seconds * 1000;
 
   const steps = routine === 'am' ? AM_STEPS : getPMSteps();
   const nextStep = steps[stepIdx + 1];
@@ -887,22 +950,26 @@ function startTimer(routine, seconds, stepIdx) {
   timerEl.classList.add('visible');
 
   function tick() {
-    timerRemaining[routine]--;
-    const m = Math.floor(timerRemaining[routine] / 60);
-    const s = timerRemaining[routine] % 60;
+    const remaining = Math.max(0, Math.round((timerEndAt[routine] - Date.now()) / 1000));
+    timerRemaining[routine] = remaining;
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
     timeEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-    fillEl.style.width = ((timerRemaining[routine] / timerTotal[routine]) * 100) + '%';
+    fillEl.style.width = ((remaining / timerTotal[routine]) * 100) + '%';
 
-    if (timerRemaining[routine] <= 0) {
+    if (remaining <= 0) {
       clearTimer(routine);
       timerEl.classList.remove('visible');
       goToStep(routine, stepIdx + 1);
     }
   }
 
-  timeEl.textContent = `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+  const m0 = Math.floor(seconds / 60);
+  const s0 = seconds % 60;
+  timeEl.textContent = `${m0}:${s0.toString().padStart(2, '0')}`;
   fillEl.style.width = '100%';
-  timerIntervals[routine] = setInterval(tick, 1000);
+  // Use 250ms interval so catching up after screen-off is near-instant
+  timerIntervals[routine] = setInterval(tick, 250);
 }
 
 function clearTimer(routine) {
@@ -1000,6 +1067,44 @@ function renderProgress() {
   });
 
   document.getElementById('cal-grid').innerHTML = cells;
+}
+
+// ============================================================
+// LATE NIGHT LOGGING (after midnight — log for previous night)
+// ============================================================
+function checkLateNightBanner() {
+  const h = new Date().getHours();
+  const banner = document.getElementById('late-night-banner');
+  if (!banner) return;
+  // Show between midnight and 4am if PM not yet logged today
+  if (h >= 0 && h < 4) {
+    const pmChecked = getChecked('pm');
+    const dismissed = localStorage.getItem('lateNightDismissed_' + new Date().toDateString());
+    banner.hidden = pmChecked.length > 0 || !!dismissed;
+  } else {
+    banner.hidden = true;
+  }
+}
+
+function lateNightLog(wasCompleted) {
+  const banner = document.getElementById('late-night-banner');
+  localStorage.setItem('lateNightDismissed_' + new Date().toDateString(), '1');
+  banner.hidden = true;
+  if (wasCompleted) {
+    // Log all PM steps for YESTERDAY
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const key = 'pm_' + yesterday.toDateString();
+    const allSteps = Array.from({length: 6}, (_, i) => i);
+    localStorage.setItem(key, JSON.stringify(allSteps));
+    // Show confirmation
+    const conf = document.createElement('div');
+    conf.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--green);color:white;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.2)';
+    conf.textContent = '✅ Last night's PM routine logged!';
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 3000);
+    updateHomeCards();
+  }
 }
 
 // ============================================================
