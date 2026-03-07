@@ -1,4 +1,4 @@
-const CACHE_NAME = 'skin-ritual-v4';
+const CACHE_NAME = 'skin-ritual-v5';
 const ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 // ---- Install & Cache ----
