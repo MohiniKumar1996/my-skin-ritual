@@ -416,7 +416,7 @@ nav {
             <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Morning Energy</div>
             <div style="font-size:11px;color:var(--rose);opacity:0.8">Upbeat · Motivating · Sets the tone</div>
           </div>
-          <a href="https://open.spotify.com/playlist/37i9dQZF1DX9XIZsB0yx9W" target="_blank"
+          <a href="https://open.spotify.com/playlist/37i9dQZF1DXdxcBWuJkbcy" target="_blank"
             style="background:var(--rose);color:white;padding:9px 14px;border-radius:10px;font-size:11px;font-weight:500;text-decoration:none;white-space:nowrap;display:inline-block">
             Open Spotify ↗
           </a>
@@ -878,7 +878,10 @@ function renderStep(routine) {
         ${checkLabel}
       </button>
 
-      ${idx > 0 ? `<div style="margin-top:10px"><button class="step-nav-btn" onclick="goToStep('${routine}', ${idx - 1})" style="width:100%;padding:10px;border-radius:10px;font-size:12px">← Back to previous step</button></div>` : ''}
+      <div class="step-nav" style="margin-top:10px">
+        ${idx > 0 ? `<button class="step-nav-btn" onclick="goToStep('${routine}', ${idx - 1})">← Back</button>` : ''}
+        ${checked && !isWaiting ? `<button class="step-nav-btn primary" onclick="goToStep('${routine}', ${idx + 1})">${isLast ? 'Finish 🎉' : 'Next →'}</button>` : ''}
+      </div>
     </div>
 
     ${nextStep && !isLast ? `
