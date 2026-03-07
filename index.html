@@ -574,7 +574,7 @@ const AM_STEPS = [
   },
   {
     id: 'am5', name: 'Sunscreen', product: 'SPF 50 PA++++ Sunscreen', brand: 'Hyphen',
-    amount: '2 finger-lengths', technique: 'Dot on 5 points, spread evenly',
+    amount: '2 finger-lengths', technique: 'Dot on forehead, nose, both cheeks & chin — spread outward',
     area: 'Full face + lip line + ears + neck', wait: 0,
     tip: '☀️ Most important step for dark spots. Right up to lip line. Reapply every 2hrs outdoors.'
   }
@@ -911,8 +911,8 @@ function renderComplete(routine) {
   document.getElementById(`step-content-${routine}`).innerHTML = `
     <div class="complete-screen">
       <span class="complete-emoji">${isPM ? '🌙' : '✨'}</span>
-      <div class="complete-title">${isPM ? 'Evening ritual complete!' : 'Morning ritual complete!'}</div>
-      <div class="complete-subtitle">${isPM ? 'Your skin is being nourished overnight 💛 Sweet dreams.' : 'Your skin is glowing and protected ☀️ Have a beautiful day!'}</div>
+      <div class="complete-title" style="${isPM ? 'color:var(--cream)' : 'color:var(--deep)'}">${isPM ? 'Evening ritual complete!' : 'Morning ritual complete!'}</div>
+      <div class="complete-subtitle" style="${isPM ? 'color:rgba(232,213,196,0.65)' : 'color:var(--muted)'}">${isPM ? 'Your skin is being nourished overnight 💛 Sweet dreams.' : 'Your skin is glowing and protected ☀️ Have a beautiful day!'}</div>
       <button class="complete-done-btn" onclick="showScreen('home')">Back to Home 🏠</button>
     </div>
   `;
@@ -920,18 +920,20 @@ function renderComplete(routine) {
 }
 
 function handleCheck(routine, idx) {
-  const wasChecked = isChecked(routine, idx);
+  if (isChecked(routine, idx)) return; // already done — ignore re-tap
   toggleCheck(routine, idx);
 
-  if (!wasChecked) {
-    const steps = routine === 'am' ? AM_STEPS : getPMSteps();
-    const step = steps[idx];
-    if (step.wait > 0) {
-      startTimer(routine, step.wait, idx);
-    }
-  }
+  const steps = routine === 'am' ? AM_STEPS : getPMSteps();
+  const step = steps[idx];
 
-  renderStep(routine);
+  if (step.wait > 0) {
+    // Has absorption time — start timer and stay on step
+    startTimer(routine, step.wait, idx);
+    renderStep(routine);
+  } else {
+    // No wait — advance immediately to next step (or finish screen if last)
+    goToStep(routine, idx + 1);
+  }
 }
 
 function goToStep(routine, idx) {
